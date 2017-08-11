@@ -37,11 +37,15 @@ RUN apt-get update && \
 	curl \
 	wget \
 	git \
-	sudo 
+	sudo \
+	vim
 
 RUN ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime && dpkg-reconfigure -f noninteractive tzdata
 
 RUN mkdir /var/www/html/qualibet
+#xdebug loggin
+RUN mkdir /var/log/xdebug
+RUN chmod 0777 /var/log/xdebug
 
 RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php && \
 	php composer-setup.php && php -r "unlink('composer-setup.php');"  && \
