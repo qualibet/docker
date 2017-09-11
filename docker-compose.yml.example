@@ -16,6 +16,18 @@ services:
         networks:
             qb-net:
                 ipv4_address: 172.20.1.2
+    dynamodb:
+        image: dwmkerr/dynamodb
+        volumes:
+            - /home/stephen/qualibet/dynamodb:/var/lib/dynamodb
+        restart: always
+        container_name: dynamodb
+        hostname: dynamodb
+        ports:
+          - "8000:8000"
+        networks:
+            qb-net:
+                ipv4_address: 172.20.1.5
     beanstalkd:
         build:
             context: ./beanstalkd
