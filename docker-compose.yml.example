@@ -3,7 +3,7 @@ services:
     db:
         image: mysql:5.7
         volumes:
-            - /home/<username>/qualibet/mysql:/var/lib/mysql
+            - /home/stephen/qualibet/mysql:/var/lib/mysql
         restart: always
         container_name: mysql-5-7
         hostname: mysql-5-7
@@ -16,18 +16,6 @@ services:
         networks:
             qb-net:
                 ipv4_address: 172.20.1.2
-    dynamodb:
-        image: dwmkerr/dynamodb
-        volumes:
-            - /home/stephen/qualibet/dynamodb:/var/lib/dynamodb
-        restart: always
-        container_name: dynamodb
-        hostname: dynamodb
-        ports:
-          - "8000:8000"
-        networks:
-            qb-net:
-                ipv4_address: 172.20.1.5
     beanstalkd:
         build:
             context: ./beanstalkd
@@ -37,29 +25,98 @@ services:
         networks:
             qb-net:
                 ipv4_address: 172.20.1.3
+    mongodb:
+            image: mongo
+            volumes:
+                - /home/stephen/qualibet/dynamodb:/data/db
+            restart: always
+            container_name: mongodb
+            hostname: mongodb
+            ports:
+              - "27017:27017"
+            networks:
+                qb-net:
+                    ipv4_address: 172.20.1.5
     httpphp7:
         build:
             context: ./php7
         depends_on:
             - db
-        container_name: qualibet        
+        container_name: qualibet
         ports:
             - "80:80"
-            - "443:443"           
+            - "443:443"
         volumes:
-            - /home/<username>/qualibet:/var/www/html/qualibet/
+            - /home/stephen/qualibet:/var/www/html/qualibet/
         environment:
             PHP_ERROR_REPORTING: 'E_ALL & ~E_STRICT'
         networks:
            qb-net:
                ipv4_address: 172.20.1.4
-                
+#    elasticsearch:
+#        image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
+#        container_name: elasticsearch
+#        environment:
+#        - cluster.name=docker-cluster
+#        - bootstrap.memory_lock=true
+#        - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#        - "node.master=true"
+#        - "xpack.security.enabled=false"
+#        ulimits:
+#            memlock:
+#                soft: -1
+#                hard: -1
+#        mem_limit: 1g
+#        volumes:
+#            - esdata1:/usr/share/elasticsearch/data
+#        ports:
+#            - 9200:9200
+#        networks:
+#            qb-net:
+#                ipv4_address: 172.20.1.5
+#    elasticsearch2:
+#        image: docker.elastic.co/elasticsearch/elasticsearch:6.0.1
+#        container_name: elasticsearch2
+#        environment:
+#            - cluster.name=docker-cluster
+#            - bootstrap.memory_lock=true
+#            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+#            - "discovery.zen.ping.unicast.hosts=172.20.1.5"
+#            - "node.master=false"
+#            - "xpack.security.enabled=false"
+#        ulimits:
+#            memlock:
+#                soft: -1
+#                hard: -1
+#            mem_limit: 1g
+#        volumes:
+#            - esdata2:/usr/share/elasticsearch/data
+#        networks:
+#            qb-net:
+#                ipv4_address: 172.20.1.6
+#    kibana: #user: elastic pw: changeme
+#        image: docker.elastic.co/kibana/kibana:6.0.1
+#        #command: kibana-plugin remove x-pack
+#        environment:
+#            - "SERVER_NAME: 172.20.1.7"
+#            - "elasticsearch.url: http://172.20.1.5:9200"
+#            - "xpack.security.enabled=false"
+#            - "xpack.monitoring.ui.container.elasticsearch.enabled=false"
+#            #XPACK_GRAPH_ENABLED: "false"
+#            #XPACK_MONITORING_ENABLED: "false"
+#            #XPACK_REPORTING_ENABLED: "false"
+#        networks:
+#            qb-net:
+#                ipv4_address: 172.20.1.7
+
 networks:
     qb-net:
         driver: bridge
         ipam:
             config:
-                - subnet: 172.20.1.0/24                
-        
-
-       
+                - subnet: 172.20.1.0/24
+volumes:
+  esdata1:
+    driver: local
+  esdata2:
+    driver: local
