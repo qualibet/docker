@@ -21,8 +21,8 @@ RUN docker-php-ext-install pdo_mysql \
         --with-freetype-dir=/usr/include/freetype2 && \
         docker-php-ext-install gd
 
-RUN pecl install redis \
-    && docker-php-ext-enable redis
+RUN pecl install redis xdebug \
+    && docker-php-ext-enable redis xdebug
 
 RUN pecl install mongodb && \
     docker-php-ext-enable mongodb
