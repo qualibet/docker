@@ -35,6 +35,7 @@ services:
         volumes:
             - /home/<UBUNTU-USER-NAME>/qualibet:/var/www/html/qualibet
             - ./php72/php-ini-overrides.ini:/usr/local/etc/php/conf.d/overrides.ini
+            - ./php72/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
         environment:
               PHP_IDE_CONFIG: "serverName=docker"
               PHP_XDEBUG_ENABLED: 1

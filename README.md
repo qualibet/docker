@@ -19,3 +19,8 @@
     - docker exec -it qualibet-php bash
     - sites: api.test / cs-backend.test / myplace-backend.test / worker.test
     - mysql: localhost:9911 user: root pw:
+    
+# xdebug
+    - server: docker
+    - IDE Key: PHPSTORM
+    - HOST: 127.0.0.1 PORT: 80
