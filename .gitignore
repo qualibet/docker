@@ -1,3 +1,4 @@
 /.idea
 /docker-compose.yml
 /php7/dockerfile
+/lambda/php-cgi
