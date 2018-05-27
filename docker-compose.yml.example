@@ -23,11 +23,20 @@ services:
             - ./nginx/worker.conf:/etc/nginx/conf.d/worker.conf
             - ./nginx/myplace-backend.conf:/etc/nginx/conf.d/myplace-backend.conf
             - ./nginx/cs-backend.conf:/etc/nginx/conf.d/cs-backend.conf
-            - ./nginx/schuhede-api.conf:/etc/nginx/conf.d/schuhede-api.conf
         ports:
           - "80:80"
         expose:
           - "9000"
+    schuhedeserver:
+        image: nginx:alpine
+        container_name: schuhede-webserver
+        volumes:
+            - /home/stephen/qualibet:/var/www/html/qualibet
+            - ./nginx/schuhede-api.conf:/etc/nginx/conf.d/schuhede-api.conf
+        ports:
+          - "88:80"
+        expose:
+          - "9900"
     php:
         build:
             context: ./php72
