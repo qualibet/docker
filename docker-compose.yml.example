@@ -39,3 +39,4 @@ services:
         environment:
               PHP_IDE_CONFIG: "serverName=docker"
               PHP_XDEBUG_ENABLED: 1
+              XDEBUG_CONFIG: remote_host=<ip of host machine>
