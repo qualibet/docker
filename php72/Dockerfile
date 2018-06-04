@@ -11,6 +11,7 @@ RUN apt-get update \
     libfreetype6-dev \
     libssl-dev \
     libmcrypt-dev \
+    zip \
   && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install pdo_mysql \
