@@ -33,3 +33,5 @@ ADD --chown=www-data:www-data  . /var/www/html
 RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php && \
 	php composer-setup.php && php -r "unlink('composer-setup.php');"  && \
 	mv composer.phar /usr/local/bin/composer
+
+RUN echo 'alias ll="ls -lah"' >> ~/.bashrc
