@@ -11,16 +11,68 @@
     - 127.0.0.1       api.test
     - 127.0.0.1       cs-backend.test
     - 127.0.0.1       myplace-backend.test
-    - 127.0.0.1       worker.test
-    
-    
+    - 127.0.0.1       worker.test  
+  
 # Usage
     - docker-compose up -d
     - docker exec -it qualibet-php bash
     - sites: api.test / cs-backend.test / myplace-backend.test / worker.test
     - mysql: localhost:9911 user: root pw:
-    
+
+# up envirioment
+* create DB for project `dev`
+use qualibet worker branch / PR 256 >> qb1833 for migrations
+```bash
+docker exec -it qualibet-php bash
+php ./worker/artisan migrate && php ./worker/artisan migrate --seed
+```
+* and update user settings
+```mysql
+UPDATE `admin_users` SET `is_service` = '1', `is_admin` = '1' WHERE (`id` = '1');
+```
+
+* set up .env file
+  - set up correct DB name
+  - set up evirioment.env 
+```dotenv
+QB_WORKER_ENVIRONMENT=dev
+```
+  
+* run bash on qualibet-php  
+* run composer install on projects dirs
+update access rights 
+```
+chmod 777 api/bootstrap/cache/
+chmod 777 cs-backend/bootstrap/cache/
+chmod 777 myplace-backend/bootstrap/cache/
+chmod 777 worker/bootstrap/cache/
+```
+
+
 # xdebug
     - server: docker
     - IDE Key: PHPSTORM
     - HOST: 127.0.0.1 PORT: 80
+    
+#### FAQ/Troubleshoting
+* in case of error with creating qualibet-php remove docker images abd before docker-compose up run build
+```bash
+docker-compose build
+```
+  
+* in case docker error:  
+> "listen tcp 0.0.0.0:80: bind: address already in use"
+
+try tu update docker-compose
+```
+webserver: 
+    ports:
+# from 80:80 to 8080:80
+       - "80:80"
+```
+
+* in case ip/domain error fix ip in /etc/hosts:  
+```bash
+docker ps
+docker inspect {CONTAINER ID qualibet-webserver} | grep "IPAddress"
+```
