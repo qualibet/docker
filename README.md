@@ -63,15 +63,14 @@ docker-compose build
 * in case docker error:  
 > "listen tcp 0.0.0.0:80: bind: address already in use"
 
-try tu update docker-compose
+try to update ports on docker-compose from 80:80 to 8080:80
 ```
 webserver: 
     ports:
-# from 80:80 to 8080:80
-       - "80:80"
+       - "8080:80"
 ```
 
-* in case ip/domain error fix ip in /etc/hosts:  
+* in case ip/domain access error via 127.0.0.1 fix ip in /etc/hosts:  
 ```bash
 docker ps
 docker inspect {CONTAINER ID qualibet-webserver} | grep "IPAddress"
