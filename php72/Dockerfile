@@ -14,7 +14,7 @@ RUN apt-get update \
     zip \
   && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-install pdo_mysql \
+RUN docker-php-ext-install calendar pdo_mysql \
     && docker-php-ext-install pcntl zip \
     && docker-php-ext-configure gd \
         --enable-gd-native-ttf \
