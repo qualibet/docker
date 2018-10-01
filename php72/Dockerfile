@@ -12,6 +12,7 @@ RUN apt-get update \
     libssl-dev \
     libmcrypt-dev \
     zip \
+    libgpgme-dev \
   && rm -rf /var/lib/apt/lists/*
 
 RUN docker-php-ext-install calendar pdo_mysql \
@@ -27,6 +28,9 @@ RUN pecl install redis xdebug \
 
 RUN pecl install mongodb && \
     docker-php-ext-enable mongodb
+
+RUN pecl install gnupg \
+    && docker-php-ext-enable gnupg
 
 ADD --chown=www-data:www-data  . /var/www/html
 
