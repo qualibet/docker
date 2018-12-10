@@ -21,7 +21,7 @@ services:
             - /home/stephen/qualibet:/var/www/html/qualibet
             - ./nginx/api.conf:/etc/nginx/conf.d/api.conf
             - ./nginx/worker.conf:/etc/nginx/conf.d/worker.conf
-            - ./nginx/worker.conf:/etc/nginx/conf.d/sap-worker.conf
+            - ./nginx/sap-worker.conf:/etc/nginx/conf.d/sap-worker.conf
             - ./nginx/myplace-backend.conf:/etc/nginx/conf.d/myplace-backend.conf
             - ./nginx/cs-backend.conf:/etc/nginx/conf.d/cs-backend.conf
         ports:
