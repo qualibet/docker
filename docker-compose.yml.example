@@ -50,4 +50,4 @@ services:
         environment:
               PHP_IDE_CONFIG: "serverName=docker"
               PHP_XDEBUG_ENABLED: 1
-              XDEBUG_CONFIG: remote_host=<ip of host machine>
+              XDEBUG_CONFIG: remote_enable=1 remote_port=9000 remote_autostart=1 remote_host=<ip of host machine> idekey=PHPSTORM
