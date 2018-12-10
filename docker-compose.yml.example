@@ -26,8 +26,6 @@ services:
             - ./nginx/cs-backend.conf:/etc/nginx/conf.d/cs-backend.conf
         ports:
           - "80:80"
-        expose:
-          - "9000"
     schuhedeserver:
         image: nginx:alpine
         container_name: schuhede-webserver
@@ -47,6 +45,8 @@ services:
             - /home/stephen/qualibet:/var/www/html/qualibet
             - ./php72/php-ini-overrides.ini:/usr/local/etc/php/conf.d/overrides.ini
             - ./php72/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+        expose:
+          - "9000"
         environment:
               PHP_IDE_CONFIG: "serverName=docker"
               PHP_XDEBUG_ENABLED: 1
