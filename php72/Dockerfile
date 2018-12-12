@@ -39,6 +39,6 @@ ARG GITHUB_TOKEN
 RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php && \
 	php composer-setup.php && php -r "unlink('composer-setup.php');"  && \
 	mv composer.phar /usr/local/bin/composer && \
-    /usr/local/bin/composer config --global github-oauth.github.com $GITHUB_TOKEN
+	/usr/local/bin/composer config --global github-oauth.github.com $GITHUB_TOKEN
 
 RUN echo 'alias ll="ls -lah"' >> ~/.bashrc
