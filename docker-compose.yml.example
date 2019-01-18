@@ -39,6 +39,8 @@ services:
     php:
         build:
             context: ./php72
+            args:
+                - GITHUB_TOKEN=$GITHUB_TOKEN
         container_name: qualibet-php
         working_dir: /var/www/html/qualibet
         volumes:

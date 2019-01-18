@@ -3,6 +3,7 @@ FROM php:7.2-fpm
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
     curl \
+    git \
     libmemcached-dev \
     libz-dev \
     libpq-dev \
@@ -34,8 +35,10 @@ RUN pecl install gnupg \
 
 ADD --chown=www-data:www-data  . /var/www/html
 
+ARG GITHUB_TOKEN
 RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php && \
 	php composer-setup.php && php -r "unlink('composer-setup.php');"  && \
-	mv composer.phar /usr/local/bin/composer
+	mv composer.phar /usr/local/bin/composer && \
+	/usr/local/bin/composer config --global github-oauth.github.com $GITHUB_TOKEN
 
 RUN echo 'alias ll="ls -lah"' >> ~/.bashrc
