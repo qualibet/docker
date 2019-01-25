@@ -33,12 +33,23 @@ RUN pecl install mongodb && \
 RUN pecl install gnupg \
     && docker-php-ext-enable gnupg
 
-ADD --chown=www-data:www-data  . /var/www/html
+ARG username=dev
+ARG userid=1000
+
+RUN groupadd -g $userid $username && \
+    useradd -r -u $userid -g $username $username && \
+    mkdir -p /home/$username && \
+    chown $userid:$userid /home/$username
+
+ADD --chown=dev:dev  . /var/www/html
 
 ARG GITHUB_TOKEN
 RUN php -r "readfile('https://getcomposer.org/installer');" > composer-setup.php && \
 	php composer-setup.php && php -r "unlink('composer-setup.php');"  && \
-	mv composer.phar /usr/local/bin/composer && \
-	/usr/local/bin/composer config --global github-oauth.github.com $GITHUB_TOKEN
+	mv composer.phar /usr/local/bin/composer
+
+USER $userid:$userid
+
+RUN /usr/local/bin/composer config --global github-oauth.github.com $GITHUB_TOKEN
 
 RUN echo 'alias ll="ls -lah"' >> ~/.bashrc
