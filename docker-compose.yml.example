@@ -53,55 +53,34 @@ services:
               PHP_IDE_CONFIG: "serverName=docker"
               PHP_XDEBUG_ENABLED: 1
               XDEBUG_CONFIG: remote_enable=1 remote_port=9000 remote_autostart=1 remote_host=<ip of host machine> idekey=PHPSTORM
-    elasticsearch1:
-        image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
-        container_name: elasticsearch1
+
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.5.4
+        container_name: elasticsearch
         environment:
-        - cluster.name=docker-cluster
-        - bootstrap.memory_lock=true
-        - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
-        ulimits:
-        memlock:
-            soft: -1
-            hard: -1
+            - discovery.type=single-node
+            - XPACK_SECURITY_ENABLED=false
         volumes:
-        - esdata1:/home/siegl/elasticsearch/data
+            - ../elasticsearch-data:/usr/share/elasticsearch/data
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
         ports:
-        - 9200:9200
+            - 9200:9200
         networks:
-        - esnet
-    elasticsearch2:
-        image: docker.elastic.co/elasticsearch/elasticsearch:6.5.4
-        container_name: elasticsearch2
-        environment:
-        - cluster.name=docker-cluster
-        - bootstrap.memory_lock=true
-        - "ES_JAVA_OPTS=-Xms1024m -Xms1024m"
-        - "discovery.zen.ping.unicast.hosts=elasticsearch"
-        ulimits:
-        memlock:
-            soft: -1
-            hard: -1
-        volumes:
-        - esdata2:/home/siegl/elasticsearch/data
-        networks:
-        - esnet
+            - esnet
     kibana:
-        image: docker.elastic.co/kibana/kibana:6.5.4
+        image: docker.elastic.co/kibana/kibana-oss:6.5.4
         container_name: kibana
         ports:
             - 5601:5601
         environment:
             SERVER_NAME: kibana
-            ELASTICSEARCH_URL: http://elasticsearch1:9200
-            XPACK_MONITORING_ENABLED: "false"
+            ELASTICSEARCH_URL: http://elasticsearch:9200
+        command: [ "/bin/bash", "-c", "/usr/share/kibana/bin/kibana-plugin remove x-pack; /usr/local/bin/kibana-docker" ]
         networks:
             - esnet
-volumes:
-    esdata1:
-        driver: local
-    esdata2:
-        driver: local
 
 networks:
     esnet:
